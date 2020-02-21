@@ -1,5 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 .idea
+functions/techtalk-demo-6ecbb-firebase-adminsdk-5l17d-ac9c8dd4d5.json
 
 # dependencies
 /node_modules
@@ -23,3 +24,5 @@ src/firebase.js
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+database-debug.log*
+firestore-debug.log*

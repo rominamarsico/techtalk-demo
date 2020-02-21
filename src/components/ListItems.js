@@ -27,6 +27,9 @@ export default class ListItem extends React.Component {
     super(props);
     this.readFromRealtime = this.readFromRealtime.bind(this);
     this.readFromFirestore = this.readFromFirestore.bind(this);
+    this.setFirestorePromiseInState = this.setFirestorePromiseInState.bind(
+      this
+    );
     this.readFromDb = this.readFromDb.bind(this);
 
     this.state = {
@@ -37,7 +40,18 @@ export default class ListItem extends React.Component {
 
   componentDidMount() {
     this.readFromRealtime();
-    this.readFromFirestore();
+    this.setFirestorePromiseInState();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // if (
+    //   prevState.firestoreDb !== null &&
+    //   prevState.firestoreDb !== this.state.firestoreDb
+    // ) {
+    //   this.setFirestorePromiseInState();
+    //   console.log("prevState", prevState.firestoreDb);
+    //   console.log("this.state.", this.state.firestoreDb);
+    // }
   }
 
   readFromRealtime() {
@@ -57,9 +71,7 @@ export default class ListItem extends React.Component {
   }
 
   readFromFirestore() {
-    let firestoreArray = [];
-
-    firestoreDB
+    return firestoreDB
       .collection("UnityObjects")
       .get()
       .then(collection => {
@@ -67,19 +79,33 @@ export default class ListItem extends React.Component {
           (res, item) => ({ ...res, [item.id]: item.data() }),
           {}
         );
-        for (let [key, value] of Object.entries(items.objects)) {
-          firestoreArray.push(`${key}: ${value}`);
-          this.setState({ firestoreDb: firestoreArray });
-        }
+        return items;
       })
       .catch(error => {
-        console.error("Cannot read from Firestore", error);
+        console.error("Cannot fetch from FirestoreDb", error);
+      });
+  }
+
+  setFirestorePromiseInState() {
+    let firestoreArray = [];
+
+    this.readFromFirestore()
+      .then(items => {
+        for (let [key, value] of Object.entries(items.objects)) {
+          firestoreArray.push(`{"${key}": ${value}}`);
+        }
+      })
+      .then(() => {
+        this.setState({ firestoreDb: firestoreArray });
+      })
+      .catch(error => {
+        console.error("Cannot set fetch of FirestoreDb in state", error);
       });
   }
 
   async readFromDb() {
     this.readFromRealtime();
-    this.readFromFirestore();
+    this.setFirestorePromiseInState();
   }
 
   deleteEntry() {
@@ -115,7 +141,7 @@ export default class ListItem extends React.Component {
             <StOutput>{firestoreValues}</StOutput>
           </div>
         </StCol>
-        <SetDbValues />
+        <SetDbValues firestoreDb={this.state.firestoreDb} />
       </StWrapper>
     );
   }
