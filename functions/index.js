@@ -14,22 +14,20 @@ exports.helloWorld = functions.https.onRequest(async () => {
     .add({ original: "Hello World" });
 });
 
-/*exports.readFromFirestore = functions.https.onRequest(async res => {
+exports.readFromFirestore = functions.https.onRequest(async (req, res) => {
   return await admin
     .firestore()
     .collection("UnityObjects")
     .doc("objects")
     .get()
-    .then(doc => {
-      return doc.data();
+    .then(async doc => {
+      const data = await doc.data();
+      if (data) {
+        return res.status(200).send(data);
+      }
+      return res.status(404);
     })
     .catch(error => {
       console.error(error);
     });
-});*/
-
-exports.readFromFirestore = functions.firestore
-  .document("UnityObjects/objects")
-  .onWrite((change, context) => {
-    return change;
-  });
+});
