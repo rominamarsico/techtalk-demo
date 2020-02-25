@@ -6,25 +6,23 @@ import Button from "./Button";
 export default class SetDbValues extends React.Component {
   constructor(props) {
     super(props);
-    this.getFirestoreItems = this.getFirestoreItems.bind(this);
     this.updateFirestore = this.updateFirestore.bind(this);
   }
 
-  getFirestoreItems() {
+  updateFirestore(key) {
     const firestoreItems = this.props.firestoreDb;
-    return firestoreItems.map(item => {
-      return JSON.parse(item);
-    });
-  }
-
-  updateFirestore(index, key) {
-    const firestoreItems = this.getFirestoreItems();
     switch (key) {
       case "cube":
-        updateFirestore("objects", { cube: !firestoreItems[index].cube });
+        updateFirestore({ cube: !firestoreItems.cube });
         break;
       case "donut":
-        updateFirestore("objects", { donut: !firestoreItems[index].donut });
+        updateFirestore({ donut: !firestoreItems.donut });
+        break;
+      case "rectangle":
+        updateFirestore({ rectangle: !firestoreItems.rectangle });
+        break;
+      case "sphere":
+        updateFirestore({ sphere: !firestoreItems.sphere });
         break;
       default:
         break;
@@ -34,16 +32,16 @@ export default class SetDbValues extends React.Component {
   render() {
     return (
       <div>
+        <Button label={"cube"} onClick={() => this.updateFirestore("cube")} />
+        <Button label={"donut"} onClick={() => this.updateFirestore("donut")} />
         <Button
-          label={"cube"}
-          onClick={() => this.updateFirestore(0, "cube")}
+          label={"rectangle"}
+          onClick={() => this.updateFirestore("rectangle")}
         />
         <Button
-          label={"donut"}
-          onClick={() => this.updateFirestore(1, "donut")}
+          label={"sphere"}
+          onClick={() => this.updateFirestore("sphere")}
         />
-        <Button label={"rectangle"} />
-        <Button label={"sphere"} />
       </div>
     );
   }
