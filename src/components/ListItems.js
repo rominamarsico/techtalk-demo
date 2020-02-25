@@ -45,6 +45,7 @@ export default class ListItem extends React.Component {
     let realtimeArray = [];
 
     realtimeDB
+      .ref("UnityObjects/objects")
       .once("value", snapshot => {
         const items = snapshot.val();
         for (let [key, value] of Object.entries(items)) {

@@ -13,16 +13,16 @@ export default class SetDbValues extends React.Component {
     const firestoreItems = this.props.firestoreDb;
     switch (key) {
       case "cube":
-        updateFirestore({ cube: !firestoreItems.cube });
+        updateFirestore({ cake: !firestoreItems.cake });
         break;
       case "donut":
         updateFirestore({ donut: !firestoreItems.donut });
         break;
       case "rectangle":
-        updateFirestore({ rectangle: !firestoreItems.rectangle });
+        updateFirestore({ hamburger: !firestoreItems.hamburger });
         break;
       case "sphere":
-        updateFirestore({ sphere: !firestoreItems.sphere });
+        updateFirestore({ icecream: !firestoreItems.icecream });
         break;
       default:
         break;
@@ -32,14 +32,14 @@ export default class SetDbValues extends React.Component {
   render() {
     return (
       <div>
-        <Button label={"cube"} onClick={() => this.updateFirestore("cube")} />
-        <Button label={"donut"} onClick={() => this.updateFirestore("donut")} />
+        <Button label={"Cake"} onClick={() => this.updateFirestore("cube")} />
+        <Button label={"Donut"} onClick={() => this.updateFirestore("donut")} />
         <Button
-          label={"rectangle"}
+          label={"Hamburger"}
           onClick={() => this.updateFirestore("rectangle")}
         />
         <Button
-          label={"sphere"}
+          label={"IceCream"}
           onClick={() => this.updateFirestore("sphere")}
         />
       </div>
